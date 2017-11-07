@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Book Listing</string>
+
+    <string name="no_internet_connection">No internet connection.</string>
+
+    <string name="no_books_found">No books found.</string>
+
+    <string name="search_edit_text_empty">Enter a word or phrase to start the search !</string>
+
+    <string name="searching">Searching...</string>
+
+
+</resources>
