@@ -129,7 +129,6 @@ public class BookListActivity extends AppCompatActivity implements LoaderManager
         } else {
             return new BookLoader(this, NEW_BOOK_REQUEST_URL);
         }
-
     }
 
     @Override
@@ -137,7 +136,6 @@ public class BookListActivity extends AppCompatActivity implements LoaderManager
 
         noConnection.setVisibility(View.GONE);
         searchProgressBar.setVisibility(View.GONE);
-
         adapterBookList.clear();
 
         // If there is a valid list of {@link Book}s, then add them to the adapter's
@@ -150,7 +148,6 @@ public class BookListActivity extends AppCompatActivity implements LoaderManager
             searchProgressBar.setVisibility(View.GONE);
             resultTextView.setText(R.string.no_books_found);
             resultImageView.setImageResource(R.drawable.ic_info_outline_black_48dp);
-
         }
     }
 
