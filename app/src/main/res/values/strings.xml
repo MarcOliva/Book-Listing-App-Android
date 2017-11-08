@@ -13,5 +13,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_search_preferences">Search Preferences</string>
 
+    <string name="error_max_result_msg">The maximum number of results can not be more than 40</string>
+
 
 </resources>

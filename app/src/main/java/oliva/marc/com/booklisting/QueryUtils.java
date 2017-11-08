@@ -28,6 +28,7 @@ public final class QueryUtils {
 
     public static String language_preference;
 
+
     public static List<Book> fetchBookData(String requestUrl) {
 
         Log.i("FETCH", "START THE HTTP REQUEST");
@@ -74,7 +75,7 @@ public final class QueryUtils {
                 String language = info.getString("language");
                 String title = reformatTitle(info.getString("title"));
                 StringBuilder authors = new StringBuilder();
-                try{
+                try {
                     JSONArray authorsArray = info.getJSONArray("authors");
                     for (int j = 0; j < authorsArray.length(); j++) {
                         authors.append(authorsArray.getString(j));
@@ -82,34 +83,34 @@ public final class QueryUtils {
                             authors.append(" , ");
                         }
                     }
-                }catch (JSONException e ){
+                } catch (JSONException e) {
                     authors.append("NONE");
                 }
                 String description;
-                try{
-                    description= limitDescription(info.getString("description"));
-                }catch (JSONException e){
+                try {
+                    description = limitDescription(info.getString("description"));
+                } catch (JSONException e) {
                     description = "No description";
                 }
                 JSONObject linkimage;
                 Bitmap urlimage;
-                try{
-                     linkimage= info.getJSONObject("imageLinks");
-                    urlimage= getBitmapFromURL(linkimage.getString("thumbnail"));
-                }catch(JSONException e){
+                try {
+                    linkimage = info.getJSONObject("imageLinks");
+                    urlimage = getBitmapFromURL(linkimage.getString("thumbnail"));
+                } catch (JSONException e) {
                     urlimage = getBitmapFromURL("https://cdn3.iconfinder.com/data/icons/linecons-free-vector-icons-pack/32/photo-128.png");
                 }
 
                 JSONObject accesInfo = book.getJSONObject("accessInfo");
                 String webreader = accesInfo.getString("webReaderLink");
 
-                if(!TextUtils.isEmpty(language_preference)){
+                if (!TextUtils.isEmpty(language_preference)) {
 
-                    if(language.equals(language_preference)){
+                    if (language.equals(language_preference)) {
 
                         books.add(new Book(title, authors.toString(), description, urlimage, webreader));
                     }
-                }else{
+                } else {
 
                     books.add(new Book(title, authors.toString(), description, urlimage, webreader));
                 }

@@ -4,38 +4,96 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="oliva.marc.com.booklisting.SearchPreferencesActivity"
     android:padding="16dp"
-    >
+    tools:context="oliva.marc.com.booklisting.SearchPreferencesActivity">
+
     <TextView
         android:id="@+id/language_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Language"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        />
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
     <RadioGroup
+        android:id="@+id/language_radio_group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintLeft_toRightOf="@id/language_text_view"
         android:layout_marginLeft="16dp"
-        >
+        app:layout_constraintLeft_toRightOf="@id/language_text_view">
+
         <RadioButton
             android:id="@+id/all_language_rb"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="ALL"
-            />
+            android:text="ALL" />
+
         <RadioButton
             android:id="@+id/en_language_rb"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="EN"/>
+            android:text="EN" />
+
         <RadioButton
             android:id="@+id/es_language_rb"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="ES"/>
+            android:text="ES" />
+    </RadioGroup>
+    <LinearLayout
+        android:id="@+id/max_results_linear_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/language_radio_group"
+        android:layout_marginTop="16dp"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Max. Results"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            />
+        <EditText
+            android:id="@+id/max_results_edit_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Write a number"
+            android:layout_marginLeft="16dp"
+            android:inputType="number"
+            />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/order_by_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Order by"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintTop_toBottomOf="@+id/max_results_linear_layout"
+        android:layout_marginTop="16dp"
+        />
+    <RadioGroup
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/max_results_linear_layout"
+        app:layout_constraintLeft_toRightOf="@+id/order_by_text_view"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp">
+
+        <RadioButton
+            android:id="@+id/order_by_relevance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Relevance" />
+
+        <RadioButton
+            android:id="@+id/order_by_newest"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Newest" />
+
+
     </RadioGroup>
 
 

@@ -8,7 +8,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -29,15 +28,21 @@ import java.util.List;
 
 public class BookListActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<Book>> {
 
-    private String BOOK_REQUEST_URL = "https://www.googleapis.com/books/v1/volumes?q=";
+    private static final String BOOK_REQUEST_URL = "https://www.googleapis.com/books/v1/volumes?q=";
     private String NEW_BOOK_REQUEST_URL;
+    private static final String AND="&";
+    private static final String EQUAL="=";
+    private static final String MAX_RESULTS="maxResults"; //Can change the maximum number of results
+    private static final String ORDER_BY = "orderBy";
+    public static String max_result_preference ="40";// Default max results number
+    public static String order_by_preference = "relevance";//Default order preference
 
     private static final int BOOK_LOADER_ID = 1;
 
     private AdapterBookList adapterBookList;
 
     private LinearLayout searchProgressBar;
-    private EditText edittextSearchBook;
+    private EditText editTextSearchBook;
     private ImageButton buttonSearchBook;
     private LinearLayout noConnection;
     private TextView resultTextView;
@@ -45,7 +50,6 @@ public class BookListActivity extends AppCompatActivity implements LoaderManager
     private ListView listView;
 
     private LoaderManager loaderManager;
-    private FragmentManager fragmentManager = getSupportFragmentManager();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +79,7 @@ public class BookListActivity extends AppCompatActivity implements LoaderManager
 
         } else {
             listView.setEmptyView(noConnection);
-            edittextSearchBook.setFocusable(false);
+            editTextSearchBook.setFocusable(false);
             searchProgressBar.setVisibility(View.GONE);
             resultTextView.setText(R.string.no_internet_connection);
             resultImageView.setImageResource(R.drawable.ic_cloud_off_black_48dp);
@@ -87,8 +91,8 @@ public class BookListActivity extends AppCompatActivity implements LoaderManager
         buttonSearchBook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String bookEditText = edittextSearchBook.getText().toString();
-                if(!TextUtils.isEmpty(bookEditText)){
+                String bookEditText = editTextSearchBook.getText().toString();
+                if (!TextUtils.isEmpty(bookEditText)) {
                     noConnection.setVisibility(View.GONE);
                     searchProgressBar.setVisibility(View.VISIBLE);
 
@@ -96,10 +100,10 @@ public class BookListActivity extends AppCompatActivity implements LoaderManager
                     //Loader reset
                     getLoaderManager().restartLoader(BOOK_LOADER_ID, null, BookListActivity.this);
                     NEW_BOOK_REQUEST_URL = null;
-                }else{
+                } else {
                     Toast.makeText(BookListActivity.this, getString(R.string.search_edit_text_empty), Toast.LENGTH_SHORT).show();
                 }
-                
+
             }
         });
 
@@ -122,21 +126,21 @@ public class BookListActivity extends AppCompatActivity implements LoaderManager
         resultImageView = (ImageView) findViewById(R.id.result_image_view);
         noConnection = (LinearLayout) findViewById(R.id.no_connection_internet);
         searchProgressBar = (LinearLayout) findViewById(R.id.searching_progressbar);
-        edittextSearchBook = (EditText) findViewById(R.id.search_book);
+        editTextSearchBook = (EditText) findViewById(R.id.search_book);
         buttonSearchBook = (ImageButton) findViewById(R.id.button_search_book);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-       getMenuInflater().inflate(R.menu.menu_main,menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.search_preferences:
-                Intent intent = new Intent(BookListActivity.this,SearchPreferencesActivity.class);
+                Intent intent = new Intent(BookListActivity.this, SearchPreferencesActivity.class);
                 startActivity(intent);
                 return true;
         }
@@ -147,9 +151,11 @@ public class BookListActivity extends AppCompatActivity implements LoaderManager
     @Override
     public Loader<List<Book>> onCreateLoader(int id, Bundle bundle) {
         if (TextUtils.isEmpty(NEW_BOOK_REQUEST_URL)) {
-            return new BookLoader(this, BOOK_REQUEST_URL);
+            //Initialize the asynctaskLoader
+            return new BookLoader(this, BOOK_REQUEST_URL+AND+MAX_RESULTS+EQUAL+max_result_preference+AND+ORDER_BY+EQUAL+order_by_preference);
         } else {
-            return new BookLoader(this, NEW_BOOK_REQUEST_URL);
+            //Initialize the asynctaskLoader
+            return new BookLoader(this, NEW_BOOK_REQUEST_URL+AND+MAX_RESULTS+EQUAL+max_result_preference+AND+ORDER_BY+EQUAL+order_by_preference);
         }
     }
 

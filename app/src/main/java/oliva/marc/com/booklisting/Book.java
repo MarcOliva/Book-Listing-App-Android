@@ -8,14 +8,14 @@ import android.graphics.Bitmap;
 
 public class Book {
     private String mTitle;
-    private String mAutors;
+    private String mAuthors;
     private String mDescription;
     private Bitmap mUrlImage;
     private String mWebReader;
 
     public Book(String title, String autors, String description, Bitmap urlimage, String webreader) {
         mTitle = title;
-        mAutors = autors;
+        mAuthors = autors;
         mDescription = description;
         mUrlImage = urlimage;
         mWebReader = webreader;
@@ -23,7 +23,7 @@ public class Book {
 
 
     public String getmAutors() {
-        return mAutors;
+        return mAuthors;
     }
 
     public String getmDescription() {
