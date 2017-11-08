@@ -26,6 +26,7 @@ import java.util.List;
 
 public final class QueryUtils {
 
+    public static String language_preference;
 
     public static List<Book> fetchBookData(String requestUrl) {
 
@@ -70,28 +71,48 @@ public final class QueryUtils {
             for (int i = 0; i < items.length(); i++) {
                 JSONObject book = items.getJSONObject(i);
                 JSONObject info = book.getJSONObject("volumeInfo");
+                String language = info.getString("language");
                 String title = reformatTitle(info.getString("title"));
                 StringBuilder authors = new StringBuilder();
-                JSONArray authorsArray = info.getJSONArray("authors");
-                for (int j = 0; j < authorsArray.length(); j++) {
-                    authors.append(authorsArray.getString(j));
-                    if (authorsArray.length() != j + 1) {
-                        authors.append(" , ");
+                try{
+                    JSONArray authorsArray = info.getJSONArray("authors");
+                    for (int j = 0; j < authorsArray.length(); j++) {
+                        authors.append(authorsArray.getString(j));
+                        if (authorsArray.length() != j + 1) {
+                            authors.append(" , ");
+                        }
                     }
+                }catch (JSONException e ){
+                    authors.append("NONE");
+                }
+                String description;
+                try{
+                    description= limitDescription(info.getString("description"));
+                }catch (JSONException e){
+                    description = "No description";
+                }
+                JSONObject linkimage;
+                Bitmap urlimage;
+                try{
+                     linkimage= info.getJSONObject("imageLinks");
+                    urlimage= getBitmapFromURL(linkimage.getString("thumbnail"));
+                }catch(JSONException e){
+                    urlimage = getBitmapFromURL("https://cdn3.iconfinder.com/data/icons/linecons-free-vector-icons-pack/32/photo-128.png");
                 }
 
-                String description = limitDescription(info.getString("description"));
-
-                JSONObject linkimage = info.getJSONObject("imageLinks");
-
-                Bitmap urlimage = getBitmapFromURL(linkimage.getString("thumbnail"));
-
                 JSONObject accesInfo = book.getJSONObject("accessInfo");
-
                 String webreader = accesInfo.getString("webReaderLink");
 
-                books.add(new Book(title, authors.toString(), description, urlimage, webreader));
+                if(!TextUtils.isEmpty(language_preference)){
 
+                    if(language.equals(language_preference)){
+
+                        books.add(new Book(title, authors.toString(), description, urlimage, webreader));
+                    }
+                }else{
+
+                    books.add(new Book(title, authors.toString(), description, urlimage, webreader));
+                }
             }
 
         } catch (JSONException e) {
