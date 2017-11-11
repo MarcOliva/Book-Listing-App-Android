@@ -23,12 +23,10 @@ public class SearchPreferencesActivity extends AppCompatActivity {
         setTitle(R.string.title_activity_search_preferences);
         init();
         loadSharedPreference();
-
-
     }
 
     private void init() {
-        SharedPreferences preferences = getSharedPreferences("language", this.MODE_PRIVATE);
+
         mAllLanguageRb = findViewById(R.id.all_language_rb);
         mEnLanguageRb = findViewById(R.id.en_language_rb);
         mEsLanguageRb = findViewById(R.id.es_language_rb);
@@ -39,47 +37,36 @@ public class SearchPreferencesActivity extends AppCompatActivity {
 
     private void createSharedPreference() {
         sharedPreferences = getPreferences(this.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
+        SearchPreferences searchPreferences = new SearchPreferences(sharedPreferences);
         //language radiogroup
-        editor.putBoolean("all", mAllLanguageRb.isChecked());
-        editor.putBoolean("en", mEnLanguageRb.isChecked());
-        editor.putBoolean("es", mEsLanguageRb.isChecked());
+        searchPreferences.setAll(mAllLanguageRb.isChecked());
+        searchPreferences.setEnglish(mEnLanguageRb.isChecked());
+        searchPreferences.setSpanish( mEsLanguageRb.isChecked());
         //max results edittext
         if(Integer.valueOf(mMaxResultsEditText.getText().toString())>40){
-            editor.putInt("maxres",40);
+            searchPreferences.setMaxResults(40);
             Toast.makeText(this, getString(R.string.error_max_result_msg), Toast.LENGTH_LONG).show();
         }else{
-            editor.putInt("maxres",Integer.valueOf(mMaxResultsEditText.getText().toString()));
+            searchPreferences.setMaxResults(Integer.valueOf(mMaxResultsEditText.getText().toString()));
         }
-
         //order radiogroup
-        editor.putBoolean("rel",mRelevanceRb.isChecked());
-        editor.putBoolean("new",mNewestRb.isChecked());
-
-        editor.commit();
-
+        searchPreferences.setRelevance(mRelevanceRb.isChecked());
+        searchPreferences.setNewest(mNewestRb.isChecked());
         validatePreferences();
     }
 
     private void loadSharedPreference() {
         sharedPreferences = getPreferences(this.MODE_PRIVATE);
-        Boolean valueAll = sharedPreferences.getBoolean("all", true);
-        Boolean valueEn = sharedPreferences.getBoolean("en", false);
-        Boolean valueEs = sharedPreferences.getBoolean("es", false);
+        SearchPreferences searchPreferences = new SearchPreferences(sharedPreferences);
 
-        mAllLanguageRb.setChecked(valueAll);
-        mEnLanguageRb.setChecked(valueEn);
-        mEsLanguageRb.setChecked(valueEs);
+        mAllLanguageRb.setChecked(searchPreferences.getAll());
+        mEnLanguageRb.setChecked(searchPreferences.getEnglish());
+        mEsLanguageRb.setChecked(searchPreferences.getSpanish());
 
-        int valueMaxResults = sharedPreferences.getInt("maxres",40);
+        mMaxResultsEditText.setText(String.valueOf(searchPreferences.getMaxResults()));
 
-        mMaxResultsEditText.setText(String.valueOf(valueMaxResults));
-
-        Boolean valueRelevance = sharedPreferences.getBoolean("rel",true);
-        Boolean valueNewest = sharedPreferences.getBoolean("new",false);
-
-        mRelevanceRb.setChecked(valueRelevance);
-        mNewestRb.setChecked(valueNewest);
+        mRelevanceRb.setChecked(searchPreferences.getRelevance());
+        mNewestRb.setChecked(searchPreferences.getNewest());
 
         validatePreferences();
     }
@@ -123,7 +110,6 @@ public class SearchPreferencesActivity extends AppCompatActivity {
                 createSharedPreference();
                 NavUtils.navigateUpFromSameTask(SearchPreferencesActivity.this);
                 return true;
-
         }
         return super.onOptionsItemSelected(item);
     }

@@ -162,7 +162,14 @@ public final class QueryUtils {
 
     // limit the amount of words that will be seen in the description
     private static String limitDescription(String description) {
-        String result = description.substring(0, 60);
+        int lengthDescription = description.length();
+        String result = null;
+        if(lengthDescription<=60){
+            result = description.substring(0,30);
+        }else if (lengthDescription<=30){
+            result = description.substring(0,10);
+        }
+
         return result + "...";
     }
 
